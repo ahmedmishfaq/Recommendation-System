@@ -1,20 +1,21 @@
 import math
-import copy
+import copy, random
 
 class CollabFilter():
 
-	def __init__(self,ratings,avg_ratings,movies):
+	def __init__(self,ratings,avg_ratings,movies,seen_movies):
 		self.ratings = ratings
 		self.rt_copy = copy.deepcopy(self.ratings)
 		self.avg_ratings = avg_ratings
 		self.movies = movies
+		self.seen_movies = seen_movies
 
 
 	def get_movie_suggestion(self,a,k):
-		
-		for j in self.get_unrated_movies(a):
+		random_sample  = random.sample(self.get_unrated_movies(a),50)
+		for j in random_sample:
 			p = self.get_movie_rating_prediction(a,j)
-			#print p
+			print p
 
 
 
@@ -25,7 +26,7 @@ class CollabFilter():
 			return
 
 		sum = 0
-		normalizing_factor = 0.1
+		normalizing_factor = 0.05
 
 		for i in self.rt_copy:  # for all user
 			if a!=i and j in self.rt_copy[i]:  # if user i has rated movie j
@@ -37,8 +38,8 @@ class CollabFilter():
 		return self.avg_ratings[a][1] + normalizing_factor*sum
 
 
-	def get_unrated_movies(self,a):   
-		return set(self.movies.keys()) - set(self.ratings[a].keys())
+	def get_unrated_movies(self,a):   # unrated movies at least seen by another user
+		return set(self.seen_movies.keys()) - set(self.ratings[a].keys())
 
 
 

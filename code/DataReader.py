@@ -8,7 +8,7 @@ class DataReader():
 		self.ratings = {}
 		self.movies = {}
 		self.avg_ratings = {}
-		self.all_movies = {}
+		self.seen_movies = {}
 
 
 	def load(self):
@@ -20,7 +20,7 @@ class DataReader():
 				self.setup_data(row)
 
 		self.load_movies()
-		return self.ratings,self.avg_ratings,self.movies
+		return self.ratings,self.avg_ratings,self.movies,self.seen_movies
 
 	def load_movies(self):
 		with open(self.movie_titles_file, 'r') as file:
@@ -46,6 +46,8 @@ class DataReader():
 		self.ratings[user_id][movie_id] = rating
 
 		self.setup_avg_rating(movie_id,user_id,rating)
+
+		self.seen_movies[movie_id] = user_id,rating
 
 
 	def setup_avg_rating(self,movie_id,user_id,rating):
