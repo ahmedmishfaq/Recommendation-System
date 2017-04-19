@@ -15,6 +15,10 @@ class CollabFilter():
 
 	def get_movie_suggestion(self,a,k):
 		#random_sample  = random.sample(self.get_unrated_movies(a),50)
+		if a not in self.ratings:
+			print("Error! no such user found")
+			return
+
 		random_sample = self.get_unrated_movies(a)
 		predictions = {}
 		for j in random_sample:
