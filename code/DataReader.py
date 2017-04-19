@@ -1,3 +1,5 @@
+# Author: Md Lutfar Rahman, PhD student, UofM
+# Recommendation system
 from csv import reader
 
 class DataReader():

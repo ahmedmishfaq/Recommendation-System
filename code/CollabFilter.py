@@ -1,3 +1,5 @@
+# Author: Md Lutfar Rahman, PhD student, UofM
+# Recommendation system
 import math, copy, random, operator
 
 
