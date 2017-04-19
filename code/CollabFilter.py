@@ -40,7 +40,18 @@ class CollabFilter():
 				break
 
 		if len(best_predictions) < k:
-			random_sample  = random.sample(self.get_unseen_unrated_movies(a),k-len(best_predictions))
+			random_sample  = random.sample(self.get_unseen_unrated_movies(a),2*(k-len(best_predictions)))
+			for item in random_sample:
+
+				if len(best_predictions) >= k:
+					break
+
+				new_item = (item,self.avg_ratings[a][1])
+
+				if new_item not in best_predictions:
+					best_predictions.append()
+
+				
 
 		return best_predictions
 
@@ -70,7 +81,7 @@ class CollabFilter():
 		return set(self.seen_movies.keys()) - set(self.ratings[a].keys())
 
 	def get_unseen_unrated_movies(self,a):   # unrated unseen movies by all user
-		return set(self.seen_movies.keys()) - set(self.ratings[a].keys())
+		return set(self.movies.keys()) - set(self.ratings[a].keys())
 
 
 
