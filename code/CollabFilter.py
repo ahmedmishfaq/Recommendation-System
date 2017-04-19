@@ -21,7 +21,16 @@ class CollabFilter():
 			predictions[j] = p
 
 		suggestions = self.sort_and_get_best(predictions,k,a)
-		print(suggestions)
+		self.show_suggested_movie_details(suggestions,k,a)
+		#print(suggestions)
+
+	def show_suggested_movie_details(self,suggestions,k,a):
+		print("Recommended %s movies for user:%s"% (k,a))
+		for (i,a_suggestion) in enumerate(suggestions):
+			#print(self.movies[a_suggestion[0]])
+			movie_year = self.movies[a_suggestion[0]][0]
+			movie_name = self.movies[a_suggestion[0]][1]
+			print("%s. %s(%s)"% (i+1,movie_name,movie_year,))
 
 	def sort_and_get_best(self,predictions,k,a):
 		sorted_predictions = sorted(predictions.items(), key=operator.itemgetter(1))
@@ -39,7 +48,7 @@ class CollabFilter():
 			if k <=0:
 				break
 
-		if len(best_predictions) < k:
+		if len(best_predictions) < k:    # if suggested ratings are lower than average, then suggest a new movie
 			random_sample  = random.sample(self.get_unseen_unrated_movies(a),2*(k-len(best_predictions)))
 			for item in random_sample:
 
