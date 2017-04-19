@@ -12,8 +12,9 @@ result = CollabFilter(ratings,avg_ratings,movies)
 
 common = result.get_pearson_coeficient(1392773,998229)
 unrated = result.get_unrated_movies(998229)
-p = result.get_movie_rating_prediction(998229,1000)
+p = result.get_movie_rating_prediction(998229,17137)
+s = result.get_movie_suggestion(998229,10)
 
-print p
+print s
 print "end"
 

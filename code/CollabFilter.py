@@ -1,11 +1,21 @@
 import math
+import copy
 
 class CollabFilter():
 
 	def __init__(self,ratings,avg_ratings,movies):
 		self.ratings = ratings
+		self.rt_copy = copy.deepcopy(self.ratings)
 		self.avg_ratings = avg_ratings
 		self.movies = movies
+
+
+	def get_movie_suggestion(self,a,k):
+		
+		for j in self.get_unrated_movies(a):
+			p = self.get_movie_rating_prediction(a,j)
+			#print p
+
 
 
 	def get_movie_rating_prediction(self,a,j):
@@ -15,12 +25,11 @@ class CollabFilter():
 			return
 
 		sum = 0
-		normalizing_factor = 1
-		for i in self.ratings:  # for all user
-			#print i 
-			if j in self.ratings[i]:  # if user i has rated movie j
+		normalizing_factor = 0.1
+
+		for i in self.rt_copy:  # for all user
+			if a!=i and j in self.rt_copy[i]:  # if user i has rated movie j
 				w_ai = self.get_pearson_coeficient(a,i)
-				#print w_ai
 				v_ij = self.get_v_aj_minus_v_a(i,j)
 
 				sum+=w_ai*v_ij
@@ -42,9 +51,6 @@ class CollabFilter():
 		for j in common_movies:
 			diff_a = self.get_v_aj_minus_v_a(a,j)
 			diff_i = self.get_v_aj_minus_v_a(i,j)
-
-			if diff_a == 0 or diff_i == 0:
-				continue
 
 			sum1+=diff_a*diff_i
 			sum2+=diff_a*diff_a
