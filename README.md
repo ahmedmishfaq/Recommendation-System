@@ -1,5 +1,8 @@
 # Recommendation-System
 Machine Learning project
 
-#How to run
-`python run.py`
+#How to run:
+Run python file in code/run.py
+```bash
+python run.py
+```
