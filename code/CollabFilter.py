@@ -1,5 +1,5 @@
-import math
-import copy, random
+import math, copy, random, operator
+
 
 class CollabFilter():
 
@@ -12,10 +12,38 @@ class CollabFilter():
 
 
 	def get_movie_suggestion(self,a,k):
-		random_sample  = random.sample(self.get_unrated_movies(a),50)
+		#random_sample  = random.sample(self.get_unrated_movies(a),50)
+		random_sample = self.get_unrated_movies(a)
+		predictions = {}
 		for j in random_sample:
 			p = self.get_movie_rating_prediction(a,j)
-			print p
+			#print p
+			predictions[j] = p
+
+		suggestions = self.sort_and_get_best(predictions,k,a)
+		print(suggestions)
+
+	def sort_and_get_best(self,predictions,k,a):
+		sorted_predictions = sorted(predictions.items(), key=operator.itemgetter(1))
+		sorted_predictions.reverse()
+
+		best_predictions = []
+		for item in sorted_predictions:
+			
+			#print(item[1],self.avg_ratings[a][1])
+			if item[1] >= self.avg_ratings[a][1]:
+				best_predictions.append(item)
+			else:
+				break
+			k-=1
+			if k <=0:
+				break
+
+		if len(best_predictions) < k:
+			random_sample  = random.sample(self.get_unseen_unrated_movies(a),k-len(best_predictions))
+
+		return best_predictions
+
 
 
 
@@ -26,7 +54,7 @@ class CollabFilter():
 			return
 
 		sum = 0
-		normalizing_factor = 0.05
+		normalizing_factor = 0.01
 
 		for i in self.rt_copy:  # for all user
 			if a!=i and j in self.rt_copy[i]:  # if user i has rated movie j
@@ -39,6 +67,9 @@ class CollabFilter():
 
 
 	def get_unrated_movies(self,a):   # unrated movies at least seen by another user
+		return set(self.seen_movies.keys()) - set(self.ratings[a].keys())
+
+	def get_unseen_unrated_movies(self,a):   # unrated unseen movies by all user
 		return set(self.seen_movies.keys()) - set(self.ratings[a].keys())
 
 
