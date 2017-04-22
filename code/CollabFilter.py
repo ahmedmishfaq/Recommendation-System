@@ -79,17 +79,21 @@ class CollabFilter():
 			print("Error! User already has a rating")
 			return
 
-		sum = 0
-		normalizing_factor = 0.01
+		sum_w = 0
+		sum_normal = 0
+		
 
 		for i in self.rt_copy:  # for all user
 			if a!=i and j in self.rt_copy[i]:  # if user i has rated movie j
 				w_ai = self.get_pearson_coeficient(a,i)
 				v_ij = self.get_v_aj_minus_v_a(i,j)
 
-				sum+=w_ai*v_ij
+				sum_w+=w_ai*v_ij
+				sum_normal+=w_ai
 
-		return self.avg_ratings[a][1] + normalizing_factor*sum
+		normalizing_factor = 1.0/sum_normal
+		#normalizing_factor = 0.001
+		return self.avg_ratings[a][1] + normalizing_factor*sum_w
 
 
 	def get_unrated_movies(self,a):   # unrated movies at least seen by another user
